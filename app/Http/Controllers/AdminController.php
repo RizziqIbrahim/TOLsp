@@ -21,14 +21,14 @@ class AdminController extends Controller
         return view('admin.article', compact('article'));
     }
 
-    //function tampilan add penggunaan
+    //function tampilan add artikel
     public function create(Request $request)
     {
         $kategori = Category::all();
         return view('admin.addArticle', compact('kategori'));
     }
 
-    //proses tambah data Penggunaan
+    //proses tambah data artikel
     public function store(Request $request)
     {
         $rules = array(
@@ -46,8 +46,9 @@ class AdminController extends Controller
                 'message' => $errorString
             ], 401);
         }else{
-            $imageName = time().'.'.$request->gambar_artikel->extension();  
-            $request->file('gambar_artikel')->move(public_path('images\artikel'), $imageName);
+
+            $imageName = time().'.'.$request->gambar_artikel->extension();  //membuat nama random untuk image beserta extension file
+            $request->file('gambar_artikel')->move(public_path('images\artikel'), $imageName);//proses pemindahan file
 
             $article = Article::create([
                 'judul_artikel' => $request->judul_artikel,
@@ -69,7 +70,7 @@ class AdminController extends Controller
         return view('admin.editArticle', compact('article', 'kategori'));
     }
 
-    //proses edit data Penggunaan
+    //proses edit data artikel
     public function update(Request $request)
     {
         $imageName = time().'.'.$request->gambar_artikel->extension();  
@@ -85,7 +86,7 @@ class AdminController extends Controller
         return redirect()->route('adminArticle')->with("success", "success mengedit data");
     }
 
-    //proses delete data penggunaan
+    //proses delete data artikel
     public function destroy($id)
     {
         Article::where("id", $id)->delete();
